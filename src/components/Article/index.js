@@ -7,14 +7,7 @@ import {connect} from 'react-redux'
 import {deleteArticle} from '../../AC/index'
 
 class Article extends Component {
-/*
-    constructor() {
-        super()
-        this.state = {
-            isOpen: false
-        }
-    }
-*/
+
     static propTypes = {
         article: PropTypes.shape({
             title: PropTypes.string.isRequired,
@@ -23,16 +16,8 @@ class Article extends Component {
         }).isRequired
     }
 
-    componentDidMount() {
-        console.log('---', 'mounted')
-    }
-
     shouldComponentUpdate(nextProps, nextState) {
         return nextProps.isOpen != this.props.isOpen
-    }
-
-    componentWillUpdate() {
-        console.log('---', 'updating')
     }
 
     render() {
@@ -63,6 +48,7 @@ class Article extends Component {
     getBody() {
         return this.props.isOpen && (
             <div>
+                <div>{this.props.article.date}</div>
                 {this.props.article.text}
                 <CommentList comments={this.props.article.comments}/>
             </div>

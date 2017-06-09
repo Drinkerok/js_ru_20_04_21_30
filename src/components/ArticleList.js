@@ -6,10 +6,6 @@ import accordion from '../decorators/accordion'
 import {connect} from 'react-redux'
 
 class ArticleList extends Component {
-    componentDidMount() {
-        const ref = this.refs[this.props.articles[0].id]
-        console.log('---', ref, findDOMNode(ref))
-    }
 
     render() {
         const {articles, toggleOpenItem, isItemOpened} = this.props
@@ -35,7 +31,14 @@ ArticleList.propTypes = {
     isItemOpened: PropTypes.func.isRequired
 }
 
-export default connect(({articles}) => ({
-        articles
-    })
-)(accordion(ArticleList))
+export default connect(state => {
+    const {selected, dateRange: {from, to}} = state.filters
+
+    return {
+        articles: state.articles.filter(article => {
+            const published = Date.parse(article.date);
+            return (!selected.length || selected.includes(article.id)) &&
+                (!from || !to || (published > from && published < to))
+        })
+    }
+})(accordion(ArticleList))
